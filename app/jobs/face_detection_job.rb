@@ -8,6 +8,7 @@ class FaceDetectionJob
   def perform(image_id)
     image = Image.find_by(id: image_id)
     return unless image
+    return if image.faces.exists?
 
     frames = detect(image)
     save(image, frames) unless frames.empty?
