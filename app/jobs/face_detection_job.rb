@@ -3,8 +3,10 @@ require 'dlib'
 class FaceDetectionJob
   include Sidekiq::Worker
 
+  sidekiq_options(queue: :default)
+
   def perform(image_id)
-    image = Image.find_by(image_id)
+    image = Image.find_by(id: image_id)
     return unless image
 
     frames = detect(image)
@@ -13,7 +15,7 @@ class FaceDetectionJob
 
   def detect(image)
     detector = Dlib::DNNFaceDetector.new(model_path)
-    image.fetch { |path| detector.detect(path) }
+    image.download { |file| detector.detect(file.path) }
   end
 
   def save(image, frames)
