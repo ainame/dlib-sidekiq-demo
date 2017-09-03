@@ -15,11 +15,11 @@ class FaceDetectionJob
 
   def detect(image)
     detector = Dlib::DNNFaceDetector.new(model_path)
-    image.download { |file| detector.detect(file.path) }
+    image.download { |file| detector.detect(Dlib::Image.load(file.path)) }
   end
 
   def save(image, frames)
-    frames.map { |f| Face.create!(image_id: image.id, x: f.x, y: f.y, width: f.width, height: f.height) }
+    frames.map { |f| Face.create!(image_id: image.id, x: f.left, y: f.top, width: f.width, height: f.height) }
   end
 
   def model_path

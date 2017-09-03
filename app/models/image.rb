@@ -1,3 +1,5 @@
+require 'demo/storage'
+
 class Image < ApplicationRecord
   enum format: [:jpg, :png, :gif]
 
@@ -13,20 +15,24 @@ class Image < ApplicationRecord
     extname = File.extname(file).downcase
     path = "#{SecureRandom.uuid}#{extname}"
     format = extname.sub('.', '')
-    storage.upload(key: path, content_type: content_type(format))
+    storage.upload(key: path, file: file, content_type: content_type(format))
     Image.create!(path: path, format: format)
   end
 
   def download(&block)
-    file = storage.download(key)
+    file = storage.download(key: path, format: format)
     block.call(file)
   ensure
-    file.close
+    file.close if file
   end
 
   private
 
+  def self.storage
+    @storage ||= ::Demo::Storage.new(Rails.application.secrets.s3_bucket)
+  end
+
   def storage
-    @storage ||= Demo::Storage.new(Rails.application.secrets.s3_bucket)
+    self.class.storage
   end
 end

@@ -21,6 +21,7 @@ module Demo
     def download(key:, format:)
       destination = Tempfile.create(["image", ".#{format}"])
       @bucket.object(key).download_file(destination.path)
+      destination
     end
   end
 end
