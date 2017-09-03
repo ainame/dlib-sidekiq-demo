@@ -1,7 +1,8 @@
 require 'demo/storage'
 
 class Image < ApplicationRecord
-  enum format: [:jpg, :png, :gif]
+  has_many(:faces)
+  enum(format: [:jpg, :png, :gif])
 
   def self.content_type(format)
     case format.to_s
