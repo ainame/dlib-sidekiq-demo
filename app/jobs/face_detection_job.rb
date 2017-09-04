@@ -1,8 +1,6 @@
 class FaceDetectionJob
   include Sidekiq::Worker
 
-  sidekiq_options(queue: :default)
-
   def perform(image_id)
     image = Image.find_by(id: image_id)
     return unless image
