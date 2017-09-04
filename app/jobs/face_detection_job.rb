@@ -1,5 +1,3 @@
-require 'dlib'
-
 class FaceDetectionJob
   include Sidekiq::Worker
 
