@@ -7,7 +7,8 @@ class FaceDetectionJob
 
     detector = Dlib::DNNFaceDetector.new(model_path)
     frames = image.download { |file| detector.detect(Dlib::Image.load(file.path)) }
-    frames.each { |f| Face.create!(image_id: image.id, x: f.left, y: f.top, width: f.width, height: f.height) }
+    frames.each { |f| Face.create!(image_id: image.id, x: f.left,
+                                   y: f.top, width: f.width, height: f.height) }
   end
 
   def model_path
