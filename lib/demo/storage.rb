@@ -23,5 +23,9 @@ module Demo
       @bucket.object(key).download_file(destination.path)
       destination
     end
+
+    def object(key)
+      @bucket.object(key)
+    end
   end
 end

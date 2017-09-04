@@ -27,6 +27,10 @@ class Image < ApplicationRecord
     file.close if file
   end
 
+  def url
+    storage.object(path).presigned_url(:get, expires_in: 3600)
+  end
+
   private
 
   def self.storage
